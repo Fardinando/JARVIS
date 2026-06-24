@@ -8,8 +8,6 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
@@ -21,14 +19,12 @@ import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.fernando.jarvis.ui.components.SoundWave
 import com.fernando.jarvis.ui.theme.JarvisColors
 import kotlinx.coroutines.launch
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Send
 
 data class ChatMessage(
     val id: Long,
@@ -78,13 +74,16 @@ fun ChatScreen(
                 .padding(horizontal = 16.dp, vertical = 12.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            IconButton(onClick = onBack) {
-                Icon(
-                    Icons.Default.ArrowBack,
-                    contentDescription = "Voltar",
-                    tint = JarvisColors.Neon,
+            androidx.compose.material3.TextButton(onClick = onBack) {
+                Text(
+                    "\u2190 VOLTAR",
+                    color = JarvisColors.Neon,
+                    fontSize = 11.sp,
+                    fontFamily = FontFamily.Monospace,
+                    letterSpacing = 1.sp,
                 )
             }
+            Spacer(Modifier.weight(1f))
             Text(
                 text = "TERMINAL",
                 fontSize = 12.sp,
@@ -93,6 +92,8 @@ fun ChatScreen(
                 letterSpacing = 4.sp,
                 fontWeight = FontWeight.Bold,
             )
+            Spacer(Modifier.weight(1f))
+            Spacer(Modifier.width(60.dp))
         }
 
         Box(
@@ -183,18 +184,11 @@ fun ChatScreen(
                             val text = input.trim()
                             input = ""
                             keyboardController?.hide()
-
-                            messages.add(
-                                ChatMessage(idCounter++, text, true)
-                            )
-
+                            messages.add(ChatMessage(idCounter++, text, true))
                             isTyping = true
                             val reply = onSend(text)
                             isTyping = false
-
-                            messages.add(
-                                ChatMessage(idCounter++, reply, false)
-                            )
+                            messages.add(ChatMessage(idCounter++, reply, false))
                         }
                     }
                 ),
@@ -203,34 +197,30 @@ fun ChatScreen(
 
             Spacer(Modifier.width(8.dp))
 
-            IconButton(
-                onClick = {
-                    if (input.isNotBlank() && !isTyping) {
-                        val text = input.trim()
-                        input = ""
-                        keyboardController?.hide()
-
-                        messages.add(
-                            ChatMessage(idCounter++, text, true)
-                        )
-
-                        isTyping = true
-                        val reply = onSend(text)
-                        isTyping = false
-
-                        messages.add(
-                            ChatMessage(idCounter++, reply, false)
-                        )
-                    }
-                },
+            Box(
                 modifier = Modifier
                     .background(JarvisColors.Neon, RoundedCornerShape(8.dp))
-                    .padding(4.dp),
+                    .clickable {
+                        if (input.isNotBlank() && !isTyping) {
+                            val text = input.trim()
+                            input = ""
+                            keyboardController?.hide()
+                            messages.add(ChatMessage(idCounter++, text, true))
+                            isTyping = true
+                            val reply = onSend(text)
+                            isTyping = false
+                            messages.add(ChatMessage(idCounter++, reply, false))
+                        }
+                    }
+                    .padding(horizontal = 16.dp, vertical = 12.dp),
             ) {
-                Icon(
-                    Icons.Default.Send,
-                    contentDescription = "Enviar",
-                    tint = JarvisColors.Deep,
+                Text(
+                    "ENVIAR",
+                    color = JarvisColors.Deep,
+                    fontSize = 11.sp,
+                    fontFamily = FontFamily.Monospace,
+                    fontWeight = FontWeight.Bold,
+                    letterSpacing = 1.sp,
                 )
             }
         }
@@ -299,4 +289,10 @@ private fun MessageBubble(msg: ChatMessage) {
             )
         }
     }
+}
+
+private fun Modifier.clickable(onClick: () -> Unit): Modifier {
+    return this.then(
+        androidx.compose.foundation.clickable(onClick = onClick)
+    )
 }

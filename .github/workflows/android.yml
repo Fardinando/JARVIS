@@ -24,17 +24,19 @@ jobs:
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
 
+      - name: Make gradlew executable
+        run: chmod +x gradlew
+
       - name: Install Android SDK components
         run: |
           echo "y" | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --sdk_root=$ANDROID_HOME \
             "platforms;android-36" \
-            "build-tools;36.0.0" \
-            "ndk;27.1.12297006" 2>&1 || true
+            "build-tools;36.0.0" || true
 
       - name: Create local.properties
         run: echo "sdk.dir=$ANDROID_HOME" > local.properties
 
-      - name: Run lint check
+      - name: Run lint
         run: ./gradlew lintDebug --continue || true
 
       - name: Build debug APK
@@ -55,7 +57,7 @@ jobs:
       - run: |
           curl -s -X POST "https://api.telegram.org/bot8636115536/sendMessage" \
             -d "chat_id=@fernandoaas" \
-            -d "text=JARVIS BUILD: ✅ SUCESSO" \
+            -d "text=JARVIS BUILD: \u2705 SUCESSO\nAPK pronto em: https://github.com/Fardinando/JARVIS/actions" \
             -d "parse_mode=Markdown" > /dev/null
 
   notify-failure:
@@ -66,5 +68,5 @@ jobs:
       - run: |
           curl -s -X POST "https://api.telegram.org/bot8636115536/sendMessage" \
             -d "chat_id=@fernandoaas" \
-            -d "text=JARVIS BUILD: ❌ FALHOU" \
+            -d "text=JARVIS BUILD: \u274c FALHOU\nVer logs: https://github.com/Fardinando/JARVIS/actions" \
             -d "parse_mode=Markdown" > /dev/null

@@ -4,20 +4,16 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.fernando.jarvis.ui.theme.JarvisColors
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Chat
-import androidx.compose.material.icons.filled.Mic
-import androidx.compose.material.icons.filled.Settings
 
 @Composable
 fun BottomNav(
@@ -33,20 +29,15 @@ fun BottomNav(
         horizontalArrangement = Arrangement.SpaceEvenly,
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        NavButton(Icons.Default.Mic, "FALAR", onClick = onSpeak)
-        NavButton(
-            icon = Icons.Default.Chat,
-            label = "CHAT",
-            isCenter = true,
-            onClick = onChat,
-        )
-        NavButton(Icons.Default.Settings, "CONFIG", onClick = onSettings)
+        NavButton("\uD83C\uDF99\uFE0F", "FALAR", onClick = onSpeak)
+        NavButton("\uD83D\uDCAC", "CHAT", isCenter = true, onClick = onChat)
+        NavButton("\u2699\uFE0F", "CONFIG", onClick = onSettings)
     }
 }
 
 @Composable
 private fun NavButton(
-    icon: androidx.compose.ui.graphics.vector.ImageVector,
+    icon: String,
     label: String,
     isCenter: Boolean = false,
     onClick: () -> Unit,
@@ -62,11 +53,10 @@ private fun NavButton(
             ),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        Icon(
+        Text(
             icon,
-            contentDescription = label,
-            tint = JarvisColors.TextPrimary,
-            modifier = Modifier.size(if (isCenter) 24.dp else 20.dp),
+            fontSize = if (isCenter) 24.sp else 20.sp,
+            textAlign = TextAlign.Center,
         )
         Text(
             label,

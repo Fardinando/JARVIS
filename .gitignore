@@ -31,3 +31,6 @@ app/release/
 .idea/
 *.iml
 out/
+
+*.json
+temp/

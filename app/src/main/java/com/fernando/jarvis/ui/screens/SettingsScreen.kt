@@ -11,7 +11,6 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
@@ -22,11 +21,8 @@ import androidx.compose.ui.unit.sp
 import com.fernando.jarvis.JarvisEngines
 import com.fernando.jarvis.ui.theme.JarvisColors
 import kotlinx.coroutines.launch
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Visibility
-import androidx.compose.material.icons.filled.VisibilityOff
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingsScreen(
     engines: JarvisEngines,
@@ -51,13 +47,16 @@ fun SettingsScreen(
                 .padding(horizontal = 16.dp, vertical = 12.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            IconButton(onClick = onBack) {
-                Icon(
-                    Icons.Default.ArrowBack,
-                    contentDescription = "Voltar",
-                    tint = JarvisColors.Neon,
+            TextButton(onClick = onBack) {
+                Text(
+                    "\u2190 VOLTAR",
+                    color = JarvisColors.Neon,
+                    fontSize = 11.sp,
+                    fontFamily = FontFamily.Monospace,
+                    letterSpacing = 1.sp,
                 )
             }
+            Spacer(Modifier.weight(1f))
             Text(
                 text = "CONFIGURACOES",
                 fontSize = 12.sp,
@@ -66,6 +65,8 @@ fun SettingsScreen(
                 letterSpacing = 4.sp,
                 fontWeight = FontWeight.Bold,
             )
+            Spacer(Modifier.weight(1f))
+            Spacer(Modifier.width(60.dp))
         }
 
         Box(
@@ -73,7 +74,6 @@ fun SettingsScreen(
                 .fillMaxWidth()
                 .height(1.dp)
                 .background(JarvisColors.CardBorder)
-                .padding(horizontal = 16.dp)
         )
 
         Column(
@@ -82,7 +82,6 @@ fun SettingsScreen(
                 .verticalScroll(rememberScrollState())
                 .padding(16.dp),
         ) {
-            // API Key Section
             Text(
                 text = "OPENROUTER API KEY",
                 fontSize = 10.sp,
@@ -92,7 +91,7 @@ fun SettingsScreen(
                 fontWeight = FontWeight.Bold,
             )
             Text(
-                text = "Chave para acessar a IA. Obtenha em openrouter.ai/keys",
+                text = "Chave para acessar a IA.\nObtenha em openrouter.ai/keys",
                 fontSize = 11.sp,
                 color = JarvisColors.TextSecondary,
                 fontFamily = FontFamily.Monospace,
@@ -126,11 +125,12 @@ fun SettingsScreen(
                 singleLine = true,
                 visualTransformation = if (showKey) VisualTransformation.None else PasswordVisualTransformation(),
                 trailingIcon = {
-                    IconButton(onClick = { showKey = !showKey }) {
-                        Icon(
-                            if (showKey) Icons.Default.VisibilityOff else Icons.Default.Visibility,
-                            contentDescription = "Toggle visibility",
-                            tint = JarvisColors.TextMuted,
+                    TextButton(onClick = { showKey = !showKey }) {
+                        Text(
+                            if (showKey) "OCULTAR" else "MOSTRAR",
+                            color = JarvisColors.TextMuted,
+                            fontSize = 9.sp,
+                            fontFamily = FontFamily.Monospace,
                         )
                     }
                 },
@@ -217,7 +217,6 @@ fun SettingsScreen(
 
             Spacer(Modifier.height(24.dp))
 
-            // TTS Toggle
             Text(
                 text = "VOZ (TTS)",
                 fontSize = 10.sp,
@@ -266,7 +265,6 @@ fun SettingsScreen(
 
             Spacer(Modifier.height(24.dp))
 
-            // Local Commands Help
             Text(
                 text = "COMANDOS LOCAIS",
                 fontSize = 10.sp,
@@ -309,7 +307,6 @@ fun SettingsScreen(
 
             Spacer(Modifier.height(24.dp))
 
-            // System Info
             Text(
                 text = "SISTEMA",
                 fontSize = 10.sp,
