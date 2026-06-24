@@ -7,6 +7,9 @@ on:
     branches: [ "main" ]
   workflow_dispatch:
 
+env:
+  TELEGRAM_CHAT_ID: "fardinandoaas"
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -54,10 +57,12 @@ jobs:
     if: success()
     runs-on: ubuntu-latest
     steps:
-      - run: |
-          curl -s -X POST "https://api.telegram.org/bot8636115536/sendMessage" \
-            -d "chat_id=@fernandoaas" \
-            -d "text=JARVIS BUILD: \u2705 SUCESSO\nAPK pronto em: https://github.com/Fardinando/JARVIS/actions" \
+      - env:
+          TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+        run: |
+          curl -s -X POST "https://api.telegram.org/bot$TOKEN/sendMessage" \
+            -d "chat_id=fardinandoaas" \
+            -d "text=JARVIS BUILD: ✅ SUCESSO\nAPK: https://github.com/Fardinando/JARVIS/actions" \
             -d "parse_mode=Markdown" > /dev/null
 
   notify-failure:
@@ -65,8 +70,10 @@ jobs:
     if: failure()
     runs-on: ubuntu-latest
     steps:
-      - run: |
-          curl -s -X POST "https://api.telegram.org/bot8636115536/sendMessage" \
-            -d "chat_id=@fernandoaas" \
-            -d "text=JARVIS BUILD: \u274c FALHOU\nVer logs: https://github.com/Fardinando/JARVIS/actions" \
+      - env:
+          TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+        run: |
+          curl -s -X POST "https://api.telegram.org/bot$TOKEN/sendMessage" \
+            -d "chat_id=fardinandoaas" \
+            -d "text=JARVIS BUILD: ❌ FALHOU\nLogs: https://github.com/Fardinando/JARVIS/actions" \
             -d "parse_mode=Markdown" > /dev/null

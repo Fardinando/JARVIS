@@ -14,9 +14,9 @@ import java.util.concurrent.TimeUnit
 
 class TelegramService {
 
-    private val botToken = "8636115536"
-    private val chatId = "@fernandoaas"
-    private val apiUrl = "https://api.telegram.org/bot$botToken/sendMessage"
+    private var botToken: String = System.getenv("TELEGRAM_BOT_TOKEN") ?: ""
+    private var chatId: String = System.getenv("TELEGRAM_CHAT_ID") ?: "fardinandoaas"
+    private val apiUrl get() = "https://api.telegram.org/bot$botToken/sendMessage"
 
     private val client = OkHttpClient.Builder()
         .connectTimeout(10, TimeUnit.SECONDS)
@@ -27,7 +27,13 @@ class TelegramService {
     private val jsonMediaType = "application/json".toMediaType()
     private val dateFormat = SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale("pt", "BR"))
 
+    fun configure(token: String, chat: String) {
+        botToken = token
+        chatId = chat
+    }
+
     fun send(message: String) {
+        if (botToken.isBlank()) return
         scope.launch {
             try {
                 val formatted = """
@@ -60,9 +66,5 @@ _${dateFormat.format(Date())}_
 
     fun sendError(error: String, context: String = "") {
         send("* ERRO:* $error\n* Contexto:* $context")
-    }
-
-    fun sendLog(log: String) {
-        send("* Log:* $log")
     }
 }
