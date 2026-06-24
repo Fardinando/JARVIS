@@ -1,0 +1,3 @@
+-keepattributes *Annotation*
+-keep class com.fernando.jarvis.** { *; }
+-keep class ai.picovoice.** { *; }
